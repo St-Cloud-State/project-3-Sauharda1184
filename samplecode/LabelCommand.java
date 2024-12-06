@@ -1,6 +1,5 @@
 import java.awt.*;
-import java.text.*;
-public class LabelCommand extends Command {
+public class LabelCommand extends AbstractCommand {
   private Label label;
   public LabelCommand(Point point) {
     label = new Label(point);

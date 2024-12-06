@@ -1,19 +1,15 @@
-import java.text.*;
 import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.*;
-import javax.swing.*;
 import java.util.*;
-public class Model {
-  private Vector itemList;
-  private Vector selectedList;
+
+public class Model implements Serializable {
+  private ArrayList<Item> itemList;
+  private ArrayList<Item> selectedList;
   //  list of "currently selected" items
   //private static UIContext uiContext;
   private static View view;
   public Model() {
-    itemList = new Vector();
-    selectedList = new Vector();
+    itemList = new ArrayList<>();
+    selectedList = new ArrayList<>();
   }
   
   //  public static void setUI(UIContext uiContext) {
@@ -42,7 +38,7 @@ public class Model {
   }
 
   public void deleteSelectedItems() {
-    selectedList.removeAllElements();
+    selectedList.clear();
     view.refresh();
   }
   public void addItem(Item item) {
@@ -53,39 +49,41 @@ public class Model {
     itemList.remove(item);
     view.refresh();
   }
-  public Enumeration getItems() {
-    return itemList.elements();
+  public Enumeration<?> getItems() {
+    return Collections.enumeration(itemList);
   }
   public void setChanged() {
     view.refresh();
   }
-  public Enumeration getSelectedItems() {
-    return selectedList.elements();
+  public Enumeration<?> getSelectedItems() {
+    return Collections.enumeration(selectedList);
   }
   // other fields, methods and classes
-  public void save(String fileName) {
-    try {
-      FileOutputStream file = new FileOutputStream(fileName);
-      ObjectOutputStream output = new ObjectOutputStream(file);
+  public void save(String fileName) throws IOException {
+    try (FileOutputStream file = new FileOutputStream(fileName);
+         ObjectOutputStream output = new ObjectOutputStream(file)) {
       output.writeObject(itemList);
       output.writeObject(selectedList);
-    } catch(IOException ioe) {
-      ioe.printStackTrace();
     }
   }
 
-  public void retrieve(String fileName) {
-    try {
-      FileInputStream file = new FileInputStream(fileName);
-      ObjectInputStream input = new ObjectInputStream(file);
-      itemList = (Vector) input.readObject();
-      selectedList = (Vector) input.readObject();
-      //Item.setUIContext(uiContext);
+  @SuppressWarnings("unchecked")
+  public void retrieve(String fileName) throws IOException, ClassNotFoundException {
+    try (FileInputStream file = new FileInputStream(fileName);
+         ObjectInputStream input = new ObjectInputStream(file)) {
+      itemList = (ArrayList<Item>) input.readObject();
+      selectedList = (ArrayList<Item>) input.readObject();
       view.refresh();
-    } catch(IOException ioe) {
-      ioe.printStackTrace();
-    } catch(ClassNotFoundException cnfe) {
-      cnfe.printStackTrace();
     }
+  }
+
+  public void readFromStream(ObjectInputStream input) throws IOException, ClassNotFoundException {
+    @SuppressWarnings("unchecked")
+    ArrayList<Item> tempItemList = (ArrayList<Item>) input.readObject(); // Read as raw type
+    itemList = tempItemList; // Safe assignment if you trust the source
+
+    @SuppressWarnings("unchecked")
+    ArrayList<Item> tempSelectedList = (ArrayList<Item>) input.readObject(); // Read as raw type
+    selectedList = tempSelectedList; // Safe assignment if you trust the source
   }
 }

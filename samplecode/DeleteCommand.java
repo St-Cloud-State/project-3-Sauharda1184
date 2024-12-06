@@ -1,8 +1,8 @@
 import java.util.*;
-class DeleteCommand extends Command {
-  private Vector itemList;
+class DeleteCommand extends AbstractCommand {
+  private Vector<Item> itemList;
   public DeleteCommand () {
-    itemList = new Vector();
+    itemList = new Vector<>();
     Enumeration enumeration = model.getSelectedItems();
     while (enumeration.hasMoreElements()) {
       Item item = (Item)(enumeration.nextElement());

@@ -1,5 +1,5 @@
 import java.awt.*;
-public class Line extends Item {
+public class Line extends AbstractItem {
   private Point point1;
   private Point point2;
   public Line(Point point1, Point point2) {

@@ -1,6 +1,5 @@
 import java.awt.*;
-import java.text.*;
-public class LineCommand extends Command {
+public class LineCommand extends AbstractCommand {
   private Line line;
   private int pointCount;
   public LineCommand() {

@@ -1,5 +1,5 @@
 import java.awt.*;
-public class Label extends Item {
+public class Label extends AbstractItem {
   private Point startingPoint;
   private String text = "";
   public Label(Point point) {
