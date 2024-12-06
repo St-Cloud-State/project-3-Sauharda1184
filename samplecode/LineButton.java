@@ -1,6 +1,6 @@
-import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 public class LineButton  extends JButton implements ActionListener {
   protected JPanel drawingPanel;
   protected View view;
@@ -23,17 +23,26 @@ public class LineButton  extends JButton implements ActionListener {
   }
   private class MouseHandler extends MouseAdapter {
     private int pointCount = 0;
+    private PolygonCommand polygonCommand;
+
     public void mouseClicked(MouseEvent event) {
-    if (++pointCount == 1) {
-        lineCommand = new LineCommand(View.mapPoint(event.getPoint()));
-        undoManager.beginCommand(lineCommand);
-    } else if (pointCount == 2) {
-        pointCount = 0;
-        lineCommand.setLinePoint(View.mapPoint(event.getPoint()));
-        drawingPanel.removeMouseListener(this);
-        view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        undoManager.endCommand(lineCommand);
-      }
+        if (SwingUtilities.isLeftMouseButton(event)) {
+            if (pointCount == 0) {
+                polygonCommand = new PolygonCommand();
+                polygonCommand.addPoint(View.mapPoint(event.getPoint()));
+                undoManager.beginCommand(polygonCommand);
+                pointCount++;
+            } else {
+                polygonCommand.addPoint(View.mapPoint(event.getPoint()));
+                pointCount++;
+            }
+        } else if (SwingUtilities.isRightMouseButton(event) && pointCount > 1) {
+            polygonCommand.execute();
+            pointCount = 0; // Reset for next polygon
+            drawingPanel.removeMouseListener(this);
+            view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            undoManager.endCommand(polygonCommand);
+        }
     }
   }
 }
