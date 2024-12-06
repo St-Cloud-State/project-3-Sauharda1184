@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Polygon extends Item {
+public class Polygon extends AbstractItem {
     private ArrayList<Point> points;
 
     public Polygon() {
@@ -29,5 +29,12 @@ public class Polygon extends Item {
 
     public ArrayList<Point> getPoints() {
         return points;
+    }
+
+    @Override
+    public void translate(int dx, int dy) {
+        for (Point point : points) {
+            point.translate(dx, dy); // Move each point by (dx, dy)
+        }
     }
 } 

@@ -1,6 +1,6 @@
 import java.util.Vector;
 
-public class MoveCommand extends Command {
+public class MoveCommand extends AbstractCommand {
     private Vector<Item> items;
     private int deltaX;
     private int deltaY;

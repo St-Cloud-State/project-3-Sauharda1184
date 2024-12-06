@@ -1,54 +1,50 @@
 import java.util.*;
 public class UndoManager {
-  private static Model model;
-  private Stack history;
-  private Stack redoStack;
+  private Stack<Command> undoStack;
+  private Stack<Command> redoStack;
   private Command currentCommand;
   public UndoManager() {
-    history = new Stack();
-    redoStack = new Stack();
-  }
-  public static void setModel(Model model) {
-    UndoManager.model = model;
+    undoStack = new Stack<Command>();
+    redoStack = new Stack<Command>();
   }
   public void beginCommand(Command command) {
-    if (currentCommand != null) {
-      if (currentCommand.end()) {
-        history.push(currentCommand);
-      }
-    }
     currentCommand = command;
-    redoStack.clear();
-    command.execute();
   }
   public void endCommand(Command command) {
-    command.end();
-    history.push(command);
-    currentCommand = null;
-    model.setChanged();
+    try {
+      if (currentCommand.end()) {
+        command.execute();
+        undoStack.push(command);
+        redoStack.clear();
+      }
+    } catch (Exception e) {
+      System.err.println("Error executing command: " + e.getMessage());
+    }
   }
-  
+  public boolean undo() {
+    if (undoStack.empty()) {
+      return false;
+    }
+    Command command = undoStack.pop();
+    command.undo();
+    redoStack.push(command);
+    return true;
+  }
+  public boolean redo() {
+    if (redoStack.empty()) {
+      return false;
+    }
+    Command command = redoStack.pop();
+    try {
+      command.execute();
+      undoStack.push(command);
+      return true;
+    } catch (Exception e) {
+      System.err.println("Error redoing command: " + e.getMessage());
+      return false;
+    }
+  }
   public void cancelCommand() {
     currentCommand = null;
-    model.setChanged();
-  }
-  
-  public void undo() {
-    if (!(history.empty())) {
-      Command command = (Command) (history.peek());
-      if (command.undo()) {
-        history.pop();
-        redoStack.push(command);
-      }
-    }
-  }
-  public void redo() {
-    if (!(redoStack.empty())) {
-      Command command = (Command)(redoStack.peek());
-      if (command.redo()) {
-        redoStack.pop();
-        history.push(command);
-      }
-    }
   }
 }

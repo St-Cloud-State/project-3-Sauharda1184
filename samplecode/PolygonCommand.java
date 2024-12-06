@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PolygonCommand extends Command {
+public class PolygonCommand extends AbstractCommand {
     private final Polygon polygon;
     private ArrayList<Point> points;
 

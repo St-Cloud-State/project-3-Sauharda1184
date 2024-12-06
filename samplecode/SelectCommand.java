@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.util.*;
-public class SelectCommand extends Command {
+public class SelectCommand extends AbstractCommand {
   private Item item;
   public SelectCommand() {
   }

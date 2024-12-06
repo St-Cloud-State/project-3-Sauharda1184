@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.*;
 class View extends JFrame {
   private UIContext uiContext;
   private JPanel drawingPanel;
@@ -85,28 +85,6 @@ class View extends JFrame {
       }
     });
     this.setUI(NewSwingUI.getInstance());
-    drawingPanel = new DrawingPanel();
-    buttonPanel = new JPanel();
-    Container contentpane = getContentPane();
-    contentpane.add(buttonPanel, "North");
-    contentpane.add(drawingPanel);
-    lineButton= new LineButton(undoManager, this, drawingPanel);
-    labelButton = new LabelButton(undoManager, this, drawingPanel);
-    selectButton= new SelectButton(undoManager, this, drawingPanel);
-    deleteButton= new DeleteButton(undoManager);
-    saveButton= new SaveButton(undoManager, this);
-    openButton= new OpenButton(undoManager, this);
-    undoButton = new UndoButton(undoManager);
-    redoButton = new RedoButton(undoManager);
-    buttonPanel.add(lineButton);
-    buttonPanel.add(labelButton);
-    buttonPanel.add(selectButton);
-    buttonPanel.add(deleteButton);
-    buttonPanel.add(saveButton);
-    buttonPanel.add(openButton);
-    buttonPanel.add(undoButton);
-    buttonPanel.add(redoButton);
-    this.setSize(600, 400);
   }
   public void refresh() {
     // code to access the Model update the contents of the drawing panel.
@@ -117,5 +95,33 @@ class View extends JFrame {
     // on the figure being created. Perhaps this
     // should be in drawing panel
     return point;
+  }
+  public void initialize() {
+    drawingPanel = new DrawingPanel();
+    buttonPanel = new JPanel();
+    Container contentpane = getContentPane();
+    contentpane.add(buttonPanel, "North");
+    contentpane.add(drawingPanel);
+    
+    // Initialize buttons with the now-set undoManager
+    lineButton = new LineButton(undoManager, this, drawingPanel);
+    labelButton = new LabelButton(undoManager, this, drawingPanel);
+    selectButton = new SelectButton(undoManager, this, drawingPanel);
+    deleteButton = new DeleteButton(undoManager);
+    saveButton = new SaveButton(undoManager, this);
+    openButton = new OpenButton(undoManager, this);
+    undoButton = new UndoButton(undoManager);
+    redoButton = new RedoButton(undoManager);
+    
+    buttonPanel.add(lineButton);
+    buttonPanel.add(labelButton);
+    buttonPanel.add(selectButton);
+    buttonPanel.add(deleteButton);
+    buttonPanel.add(saveButton);
+    buttonPanel.add(openButton);
+    buttonPanel.add(undoButton);
+    buttonPanel.add(redoButton);
+    
+    this.setSize(600, 400);
   }
 }
