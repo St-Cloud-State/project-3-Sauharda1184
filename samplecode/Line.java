@@ -35,5 +35,13 @@ public class Line extends Item {
   public String toString() {
     return "Line  from " + point1 + " to " + point2;
   }
+  public void translate(int deltaX, int deltaY) {
+    if (point1 != null) {
+        point1.translate(deltaX, deltaY);
+    }
+    if (point2 != null) {
+        point2.translate(deltaX, deltaY);
+    }
+  }
 }
 

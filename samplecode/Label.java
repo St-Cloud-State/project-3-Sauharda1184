@@ -25,4 +25,7 @@ public class Label extends Item {
   public Point getStartingPoint() {
     return startingPoint;
   }
+  public void translate(int deltaX, int deltaY) {
+    startingPoint.translate(deltaX, deltaY);
+  }
 }

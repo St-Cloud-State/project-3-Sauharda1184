@@ -1,5 +1,5 @@
-import java.io.*;
 import java.awt.*;
+import java.io.*;
 public abstract class Item implements Serializable {
   //protected static 
   //public static void setUIContext(UIContext uiContext) {
@@ -14,4 +14,5 @@ public abstract class Item implements Serializable {
   public  abstract void render(UIContext uiContext);
     //uiContext.draw(this);
   //}
+  public abstract void translate(int deltaX, int deltaY);
 }
