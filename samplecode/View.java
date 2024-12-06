@@ -103,8 +103,8 @@ class View extends JFrame {
     contentpane.add(buttonPanel, "North");
     contentpane.add(drawingPanel);
     
-    // Initialize buttons with the now-set undoManager
     lineButton = new LineButton(undoManager, this, drawingPanel);
+    JButton polygonButton = new PolygonButton(undoManager, this, drawingPanel);
     labelButton = new LabelButton(undoManager, this, drawingPanel);
     selectButton = new SelectButton(undoManager, this, drawingPanel);
     deleteButton = new DeleteButton(undoManager);
@@ -114,6 +114,7 @@ class View extends JFrame {
     redoButton = new RedoButton(undoManager);
     
     buttonPanel.add(lineButton);
+    buttonPanel.add(polygonButton);
     buttonPanel.add(labelButton);
     buttonPanel.add(selectButton);
     buttonPanel.add(deleteButton);

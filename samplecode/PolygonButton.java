@@ -2,14 +2,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class LineButton extends JButton implements ActionListener {
+public class PolygonButton extends JButton implements ActionListener {
     protected JPanel drawingPanel;
     protected View view;
     private MouseHandler mouseHandler;
     private UndoManager undoManager;
 
-    public LineButton(UndoManager undoManager, View jFrame, JPanel jPanel) {
-        super("Line");
+    public PolygonButton(UndoManager undoManager, View jFrame, JPanel jPanel) {
+        super("Polygon");
         this.undoManager = undoManager;
         addActionListener(this);
         view = jFrame;
@@ -23,23 +23,24 @@ public class LineButton extends JButton implements ActionListener {
     }
 
     private class MouseHandler extends MouseAdapter {
-        private LineCommand lineCommand;
+        private PolygonCommand polygonCommand;
         private int pointCount = 0;
 
         public void mouseClicked(MouseEvent event) {
-            if (pointCount == 0) {
-                lineCommand = new LineCommand();
-                undoManager.beginCommand(lineCommand);
-                lineCommand.setLinePoint(View.mapPoint(event.getPoint()));
+            if (SwingUtilities.isLeftMouseButton(event)) {
+                if (pointCount == 0) {
+                    polygonCommand = new PolygonCommand();
+                    undoManager.beginCommand(polygonCommand);
+                }
+                polygonCommand.addPoint(View.mapPoint(event.getPoint()));
                 pointCount++;
-            } else if (pointCount == 1) {
-                lineCommand.setLinePoint(View.mapPoint(event.getPoint()));
-                lineCommand.execute();
+            } else if (SwingUtilities.isRightMouseButton(event) && pointCount > 2) {
+                polygonCommand.execute();
                 pointCount = 0;
                 drawingPanel.removeMouseListener(this);
                 view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                undoManager.endCommand(lineCommand);
+                undoManager.endCommand(polygonCommand);
             }
         }
     }
-}
+} 
